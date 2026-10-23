@@ -1,0 +1,46 @@
+[package]
+name = "coop-sweden-receipt-extractor"
+description = "Download and parse your Coop Sweden receipts, with BankID login (unofficial)."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/qrabbe/coop-sweden-receipt-extractor"
+rust-version = "1.88"
+keywords = ["coop", "receipt", "pdf", "bankid", "sweden"]
+categories = ["parser-implementations", "command-line-utilities"]
+exclude = [".github/", "rust-toolchain.toml"]
+
+[package.metadata.docs.rs]
+features = ["client"]
+
+[features]
+client = ["dep:reqwest", "dep:tokio", "dep:url"]
+cli = ["client", "tokio/sync", "tokio/rt-multi-thread", "tokio/macros", "dep:chrono", "dep:qrcode", "dep:zip"]
+
+[[bin]]
+name = "coop-receipts"
+path = "src/main.rs"
+required-features = ["cli"]
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[dependencies]
+pdf-extract = "0.12.1"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2.0.21"
+# client
+reqwest = { version = "0.13.3", default-features = false, features = ["rustls", "gzip"], optional = true }
+tokio = { version = "1.53.3", features = ["rt", "time"], optional = true }
+url = { version = "2", optional = true }
+# cli
+chrono = { version = "0.4", default-features = false, features = ["std"], optional = true }
+qrcode = { version = "0.14.1", default-features = false, optional = true }
+zip = { version = "2", default-features = false, features = ["deflate"], optional = true }
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
+strip = true

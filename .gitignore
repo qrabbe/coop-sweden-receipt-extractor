@@ -1,0 +1,17 @@
+# Private data: never commit. Keep this block first.
+private/
+.coop-tokens.json
+*.pdf
+*.zip
+.env
+.env.*
+!.env.example
+
+# Rust
+target/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
